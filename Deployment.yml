@@ -1,0 +1,45 @@
+# Sample deployment manifest file for saltstack.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: salt
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: salt
+  template:
+    metadata:
+      labels:
+        app: salt
+    spec:
+      containers:
+      - name: salt
+        image: saltstack/salt
+        
+        ports: 
+        - containerPort: 4505
+        - containerPort: 4506
+        - containerPort: 8000
+        
+
+# Service for CLuster IP and enable the ports and map
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: salt
+spec:
+  selector:
+    app: salt
+  ports:
+  - name: port-4505
+    port: 4505
+    targetPort: 4505
+  - name: port-4506
+    port: 4506
+    targetPort: 4506
+  - name: port-8000
+    port: 8000
+    targetPort: 8000
+

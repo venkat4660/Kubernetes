@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rsapp
+spec:
+  replicas: 3
+  selector:
+      dc: mumbai
+  template:
+    metadata:
+      name: rsapp
+      labels:
+       dc: mumbai
+    spec:
+      containers:
+        - name: rsapp
+          image: nginx

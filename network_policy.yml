@@ -1,0 +1,36 @@
+# How to deny the all network from(Ingress) and to(Egress)
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny_network_policy
+  namespace: default
+spec:
+  podSelector: {}  # EveryPod, If we want specify the matchLabels for particuler pods and deployments in the namespace.
+  policyType:
+    - Ingress
+    - Egress
+  # We can specify the below 3 types to allow the network for Ingress and Egress
+  # 1.namespaceSelector
+  # 2.ipBlock 
+  # 3.podSelector. 
+  ingress:     # if we specify "-", means it is OR conndution. 
+    - from:
+       - namespaceSelector:  
+           matchLabels:
+             my-ns: default-ns 
+      # - ipBlock:                # If we remove "-", Means it is AND condution. same in below one also. 
+      #     cidr: 172.168.1.0/24
+      #     except: 
+      #      - 172.168.1.0/24             
+      # - podSelector:  
+      #     matchLabels:
+      #       role: frontend
+      # ports:
+      #  - protocal: tcp
+      #    port: 30
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              my-ns: default-ns

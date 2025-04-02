@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: myreplicaset
+  labels:
+    app: myapp
+    key: value
+spec:
+  replicas: 3
+  selector:
+    matchExpressions:  # Based on the expressions below, it will create the ReplicaSet pods.
+      - {key: dc , operator: In , value: mum }   # It will match and consider only the pods with dc=mum.
+      - {key: env, operator: NotIn, value: dev}  # From the matched pods, it will exclude those with env=dev.
+  template:
+    metadata:
+      labels:
+        key: value
+    spec:
+      containers:
+        - name: myapp
+          image: <Image>
+  

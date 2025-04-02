@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Pod  #Resource type (Pod in this case)
+metadata:
+  name: My-Pod   #Unique name for the Pod
+  labels:  #To organize and select Pods
+    app: My-Pod   #App label, useful for selectors
+    tier: backend  #To identify the application layer
+spec:
+  containers:   # Containers running in this pod
+  - name: My-First-Container   #Name of this container
+    image: nginx   #Docker image for the container
+    resources:
+      limits:   # resource limits for the pod
+        memory: "128Mi"   #memory limit of the pod
+        cpu: "500m"   #cpu limit of the pod
+    ports:   
+      - containerPort: 80  # Port the container exposes internally
+    env:                   # Environment variables for configuration
+    - name: ENV
+      value: production
+
+  nodeSelector: # Schedule the pod on speciific node
+    env: dev   # Schedule only on nodes labeled with "env: dev, disktype: ssd"
+    disktype: ssd 
+
+  tolerance:   # Allows scheduling on tained nodes
+  - key: "color"   # taint key to tolerance
+    operator: "Equal"  # exat match or exists
+    value: "blue"  # value to match
+    effect: "NoScheduler" # effect : NoScheduler (Can't schedule) NoExecute (eviet)
+
+  volumes:        # Map the external storage(Persistent storage) to pod
+  - name: config-volume # Name of the Volume
+    configMap:    # Use configMap as the source
+     name: My-volume-config # Reference the config map named"My-volume-config"
+
+  restartPolicy: Always # Pod restart policy (Always, OnFailure, or Nerver)
+
+  initContainers:       #Runs before the main containers
+  - name: init-commands    #Init container name
+    image: busybox     #Image for the init container
+    command: ["sh", "-c", "echo Init; sleep 5"]   #Setup commands
+
+
+
+
+    
+  

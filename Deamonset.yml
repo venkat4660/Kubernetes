@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: DeamonSet
+metadata:
+  name: Deamonset-name
+  namespace: namespace
+spec:
+  selector:
+    matchLabels:
+      app: dev
+  template:
+    metadata: 
+      labels:
+        app: dev
+    spec:
+      containers:
+      - name:
+        image:
+
